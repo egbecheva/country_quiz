@@ -4,10 +4,12 @@ import ReactDOM from 'react-dom';
 const App = () => {
   let results;
   let obj = {};
-  let array = [];
 
   const generateMap = (results) => {
-    results.map((item) => (obj[item?.capital?.[0] || item.name.common] = item.name.common));
+    results.map((item) => {
+      obj[item?.capital?.[0] || item.name.common] = item.name.common;
+    });
+    console.log(obj);
   };
 
   const fetchAllData = () => {
@@ -20,7 +22,6 @@ const App = () => {
   useEffect(() => {
     fetchAllData();
   }, []);
-  console.log(obj);
   return (
     <h1>
       <div>test</div>
