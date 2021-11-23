@@ -1,4 +1,4 @@
-const HtmlWebPackPlugin = require("html-webpack-plugin")
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 module.exports = {
   module: {
     rules: [
@@ -6,23 +6,27 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader", //This is a webpack helper which allows to transpile Javascript files with babel and webpack. It uses babel under the hood
-        },
+          loader: 'babel-loader' //This is a webpack helper which allows to transpile Javascript files with babel and webpack. It uses babel under the hood
+        }
       },
       {
         test: /\.html$/,
         use: [
           {
-            loader: "html-loader", //Install HTML web pack plugin and HTML loader for displaying our page
-          },
-        ],
+            loader: 'html-loader' //Install HTML web pack plugin and HTML loader for displaying our page
+          }
+        ]
       },
-    ],
+      {
+        test: /\.(sass|less|css)$/,
+        loaders: ['style-loader', 'css-loader']
+      }
+    ]
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: "./src/index.html",
-      filename: "./index.html",
-    }),
-  ],
-}
+      template: './src/index.html',
+      filename: './index.html'
+    })
+  ]
+};
