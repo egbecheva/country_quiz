@@ -1,61 +1,86 @@
-import React, { useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
-  let results;
-  let obj = {};
-  const generateMap = (results) => {
-    results.map((item) => {
-      obj[item?.capital?.[0] || item?.name.common] = item?.name.common;
-    });
-    return obj;
-  };
-
-  const fetchAllData = () => {
-    fetch('https://restcountries.com/v3.1/all')
-      .then((response) => response.json())
-      .then((data) => (results = data))
-      .then(() => generateMap(results))
-      .finally(() => console.log(Object.keys(obj)));
-  };
-
+  const [data, setData] = useState([]);
+  let answers = useRef([, , , ,]);
   useEffect(() => {
-    fetchAllData();
+    fetchCapital();
   }, []);
 
+  useEffect(() => {
+    if (data.length > 0) {
+      randomAnswers();
+    }
+  }, [data]);
+
+  let array = [];
+  const randomIndex = parseInt(Math.random() * data.length);
+  const correctAnswer = {
+    country: data?.[randomIndex]?.name?.common,
+    correct: true,
+    capital: data?.[randomIndex]?.capital[0]
+  };
+  console.log(correctAnswer);
+
+  const fetchCapital = () => {
+    fetch('https://restcountries.com/v3.1/all')
+      .then((response) => response.json())
+      .then((data) => setData(data))
+      .catch((err) => console.error(err));
+  };
+
+  const randomAnswers = () => {
+    for (let i = 0; i < 3; i++) {
+      array.push({
+        country: data?.[parseInt(Math.random() * data?.length)]?.name?.common,
+        correct: false
+      });
+    }
+    array.push(correctAnswer);
+    answers.current = array;
+  };
+  console.log(answers);
+
+  const shuffledArr = (array) =>
+    array
+      .map((a) => ({ sort: Math.random(), value: a }))
+      .sort((a, b) => a.sort - b.sort)
+      .map((a) => a.value);
+
+  const shuffledAnswers = shuffledArr(answers.current);
+
   return (
-    <div>
+    <div className="d-flex justify-content-center align-items-center flex-column">
       <Box
         sx={{
           width: 300,
-          height: 450,
+          height: 350,
           borderRadius: 3,
           border: 1,
           marginTop: 2,
-          borderColor: '#D3D3D3',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'column'
+          borderColor: '#D3D3D3'
         }}>
-        <Button className="mt-3 w-75 " variant="outlined">
-          Delete
-        </Button>
-        <Button className="mt-3 w-75 " variant="outlined">
-          Delete
-        </Button>
-        <Button className="mt-3 w-75 " variant="outlined">
-          Delete
-        </Button>
-        <Button className="mt-3 w-75 " variant="outlined">
-          Delete
-        </Button>
-        <Button className="mt-4 col-4 w-50" variant="contained" color="success">
-          Next
-        </Button>
+        <div>
+          <div className="d-flex justify-content-center align-items-center flex-column">
+            <div className="mt-4">{correctAnswer.capital} is the capital of</div>
+            {/* {shuffledAnswers.map((el, index) => (
+              <>
+                <Button key={index} className="mt-3 w-75 " variant="outlined">
+                  {el.country}
+                </Button>
+              </>
+            ))} */}
+          </div>
+          <div className="d-flex justify-content-end m-4">
+            <Button variant="contained" color="success">
+              Next
+            </Button>
+          </div>
+        </div>
       </Box>
     </div>
   );
