@@ -2,29 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Skeleton from '@mui/material/Skeleton';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
   const [data, setData] = useState([]);
-  let answers = useRef([, , , ,]);
-  useEffect(() => {
-    fetchCapital();
-  }, []);
-
-  useEffect(() => {
-    if (data.length > 0) {
-      randomAnswers();
-    }
-  }, [data]);
-
-  let array = [];
-  const randomIndex = parseInt(Math.random() * data.length);
-  const correctAnswer = {
-    country: data?.[randomIndex]?.name?.common,
-    correct: true,
-    capital: data?.[randomIndex]?.capital[0]
-  };
-  console.log(correctAnswer);
+  const [answers, setAnswers] = useState([]);
 
   const fetchCapital = () => {
     fetch('https://restcountries.com/v3.1/all')
@@ -33,17 +16,15 @@ const App = () => {
       .catch((err) => console.error(err));
   };
 
-  const randomAnswers = () => {
-    for (let i = 0; i < 3; i++) {
-      array.push({
-        country: data?.[parseInt(Math.random() * data?.length)]?.name?.common,
-        correct: false
-      });
+  useEffect(() => {
+    fetchCapital();
+  }, []);
+
+  useEffect(() => {
+    if (data?.length > 0) {
+      generateQuestion();
     }
-    array.push(correctAnswer);
-    answers.current = array;
-  };
-  console.log(answers);
+  }, [data]);
 
   const shuffledArr = (array) =>
     array
@@ -51,7 +32,27 @@ const App = () => {
       .sort((a, b) => a.sort - b.sort)
       .map((a) => a.value);
 
-  const shuffledAnswers = shuffledArr(answers.current);
+  const generateQuestion = () => {
+    const getRandomIndex = () => parseInt(Math.random() * data.length);
+
+    const correctAnswer = {
+      country: data?.[getRandomIndex()]?.name?.common,
+      correct: true,
+      capital: data?.[getRandomIndex()]?.capital[0]
+    };
+    let array = [];
+    for (let i = 0; i < 3; i++) {
+      array.push({
+        country: data?.[getRandomIndex()]?.name?.common,
+        correct: false
+      });
+    }
+    array.push(correctAnswer);
+    setAnswers(array);
+    shuffledArr(answers);
+    return answers;
+  };
+  console.log(answers);
 
   return (
     <div className="d-flex justify-content-center align-items-center flex-column">
@@ -66,17 +67,24 @@ const App = () => {
         }}>
         <div>
           <div className="d-flex justify-content-center align-items-center flex-column">
-            <div className="mt-4">{correctAnswer.capital} is the capital of</div>
-            {/* {shuffledAnswers.map((el, index) => (
+            <div className="mt-4">
+              {!data?.length ? (
+                <Skeleton variant="rectangular" width={118} height={50} animation="wave" />
+              ) : (
+                answers.map((a) => a.correct && a.capital)
+              )}
+              is the capital of
+            </div>
+            {answers.map((el, index) => (
               <>
                 <Button key={index} className="mt-3 w-75 " variant="outlined">
                   {el.country}
                 </Button>
               </>
-            ))} */}
+            ))}
           </div>
           <div className="d-flex justify-content-end m-4">
-            <Button variant="contained" color="success">
+            <Button onClick={fetchCapital} variant="contained" color="success">
               Next
             </Button>
           </div>
