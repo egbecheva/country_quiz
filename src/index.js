@@ -55,36 +55,31 @@ const App = () => {
   console.log(answers);
 
   return (
-    <div className="d-flex justify-content-center align-items-center flex-column">
+    <div>
       <Box
         sx={{
           width: 300,
-          height: 350,
           borderRadius: 3,
           border: 1,
           marginTop: 2,
           borderColor: '#D3D3D3'
         }}>
-        <div>
-          <div className="d-flex justify-content-center align-items-center flex-column">
-            <div className="mt-4">
-              {!data?.length ? (
-                <Skeleton variant="rectangular" width={118} height={50} animation="wave" />
-              ) : (
-                answers.map((a) => a.correct && a.capital)
-              )}
-              is the capital of
-            </div>
+        <div className="p-4">
+          <h5 className="d-flex flex-column align-items-center ">
+            {!data?.length ? <Skeleton /> : answers.map((a) => a.correct && a.capital)}
+            is the capital of
+          </h5>
+          <div className="d-flex flex-column align-items-center ">
             {answers.map((el, index) => (
               <>
-                <Button key={index} className="mt-3 w-75 " variant="outlined">
+                <Button key={index} className="mb-3 w-75 " variant="outlined">
                   {el.country}
                 </Button>
               </>
             ))}
           </div>
-          <div className="d-flex justify-content-end m-4">
-            <Button onClick={fetchCapital} variant="contained" color="success">
+          <div className="d-flex flex-column align-items-end">
+            <Button className="w-25" onClick={fetchCapital} variant="contained" color="success">
               Next
             </Button>
           </div>
