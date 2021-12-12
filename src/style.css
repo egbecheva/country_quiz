@@ -1,0 +1,13 @@
+body {
+  background-image: url(./assets/background.png);
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.undraw-adventure-icon {
+  position: absolute;
+  right: 0px;
+  top: -96px;
+}
