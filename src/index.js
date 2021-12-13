@@ -217,7 +217,7 @@ const App = () => {
     </svg>
   );
 
-  const shuffledArr = (array) =>
+  const shuffledOptions = (array) =>
     array
       .map((a) => ({ sort: Math.random(), value: a }))
       .sort((a, b) => a.sort - b.sort)
@@ -238,8 +238,8 @@ const App = () => {
       arrayWithQuestions.push({
         id: questionId && questionId,
         country: data?.[questionId]?.name?.common,
-        answer: data?.[questionId]?.capital[0],
-        options: shuffledArr([...getRandomAnswers(), data?.[questionId]?.capital[0]])
+        answer: data?.[questionId]?.capital?.[0],
+        options: shuffledOptions([...getRandomAnswers(), data && data?.[questionId]?.capital?.[0]])
       });
     }
 
@@ -249,6 +249,10 @@ const App = () => {
 
   console.log(questions[activeQuestionIndex]);
   //TODO: render conditionally based on data length
+
+  if (!data?.length) {
+    return <>Loading...</>;
+  }
   return (
     <>
       <h5 className="text-uppercase text-white font-weight-bold">Country Quiz</h5>
@@ -264,7 +268,7 @@ const App = () => {
         <div className="undraw-adventure-icon">{undrawAdventure}</div>
         <div className="p-4">
           <h5 className="d-flex flex-column align-items-center ">
-            {!data?.length ? <Skeleton /> : questions && questions[activeQuestionIndex]?.answer}
+            {questions && questions[activeQuestionIndex]?.answer}
             is the capital of
           </h5>
           <div className="d-flex flex-column align-items-center ">
