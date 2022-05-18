@@ -239,7 +239,7 @@ const App = () => {
         id: questionId && questionId,
         country: data?.[questionId]?.name?.common,
         answer: data?.[questionId]?.capital?.[0],
-        options: shuffledOptions([...getRandomAnswers(), data && data?.[questionId]?.capital?.[0]])
+        options: shuffledOptions([...getRandomAnswers(), data && data?.[questionId]?.name?.common])
       });
     }
 
@@ -269,7 +269,7 @@ const App = () => {
         <div className="p-4">
           <h5 className="d-flex flex-column align-items-center ">
             {questions && questions[activeQuestionIndex]?.answer}
-            is the capital of
+            &nbsp;is the capital of
           </h5>
           <div className="d-flex flex-column align-items-center ">
             {questions &&
