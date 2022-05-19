@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -13,12 +13,25 @@ const App = () => {
   const [data, setData] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
+  const [countCorrectAnswers, setCountCorrectAnswers] = useState(0);
+  let selectedAnswer;
+
+  if (activeQuestionIndex === 9) {
+    alert(`You have ${countCorrectAnswers} correct answers!`);
+  }
 
   const fetchCapital = () => {
     fetch('https://restcountries.com/v3.1/all')
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((err) => console.error(err));
+  };
+
+  const isCorrectAnswer = (selectedAnswer) => {
+    if (questions[activeQuestionIndex]?.country?.toLowerCase() === selectedAnswer?.toLowerCase()) {
+      setCountCorrectAnswers(countCorrectAnswers + 1);
+      alert('Correct!');
+    } else alert('Wrong!');
   };
 
   useEffect(() => {
@@ -238,7 +251,7 @@ const App = () => {
       arrayWithQuestions.push({
         id: questionId && questionId,
         country: data?.[questionId]?.name?.common,
-        answer: data?.[questionId]?.capital?.[0],
+        capital: data?.[questionId]?.capital?.[0],
         options: shuffledOptions([...getRandomAnswers(), data && data?.[questionId]?.name?.common])
       });
     }
@@ -253,46 +266,94 @@ const App = () => {
   if (!data?.length) {
     return <>Loading...</>;
   }
+
   return (
     <>
       <h5 className="text-uppercase text-white font-weight-bold">Country Quiz</h5>
-      <Box
-        sx={{
-          width: 350,
-          borderRadius: 3,
-          position: 'relative',
-          border: 1,
-          borderColor: '#D3D3D3',
-          backgroundColor: '#FFF'
-        }}>
-        <div className="undraw-adventure-icon">{undrawAdventure}</div>
-        <div className="p-4">
-          <h5 className="d-flex flex-column align-items-center ">
-            {questions && questions[activeQuestionIndex]?.answer}
-            &nbsp;is the capital of
-          </h5>
-          <div className="d-flex flex-column align-items-center ">
-            {questions &&
-              questions[activeQuestionIndex]?.options.map((el, index) => (
-                <React.Fragment key={index}>
-                  <Button className="mb-3 w-75 " variant="outlined">
-                    {el}
-                  </Button>
-                </React.Fragment>
-              ))}
+      {activeQuestionIndex === 2 ? (
+        <Box
+          sx={{
+            width: 350,
+            borderRadius: 3,
+            position: 'relative',
+            border: 1,
+            borderColor: '#D3D3D3',
+            backgroundColor: '#FFF'
+          }}>
+          <div className="undraw-adventure-icon">{undrawAdventure}</div>
+          <div className="p-4">
+            <h1 className="d-flex flex-column align-items-center ">Results</h1>
+            <h5>
+              {countCorrectAnswers > 1 ? (
+                <>
+                  You got <span>{countCorrectAnswers} </span> correct answers!`
+                </>
+              ) : (
+                <>
+                  You got <span className="divStyle">{countCorrectAnswers} </span> correct answer!
+                </>
+              )}
+            </h5>
+            <div className="d-flex flex-column align-items-end">
+              <Button
+                className="w-50"
+                onClick={() => {
+                  generateQuestions();
+                  setActiveQuestionIndex(0);
+                  setCountCorrectAnswers(0);
+                }}
+                style={{ backGround: '#F9A826' }}>
+                Try again
+              </Button>
+            </div>
           </div>
-          <div className="d-flex flex-column align-items-end">
-            <Button
-              className="w-25"
-              onClick={() => {
-                setActiveQuestionIndex(activeQuestionIndex + 1);
-              }}
-              style={{ backGround: '#F9A826' }}>
-              Next
-            </Button>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            width: 350,
+            borderRadius: 3,
+            position: 'relative',
+            border: 1,
+            borderColor: '#D3D3D3',
+            backgroundColor: '#FFF'
+          }}>
+          <div className="undraw-adventure-icon">{undrawAdventure}</div>
+          <div className="p-4">
+            <h5 className="d-flex flex-column align-items-center ">
+              {questions && questions[activeQuestionIndex]?.capital}
+              &nbsp;is the capital of
+            </h5>
+            <div className="d-flex flex-column align-items-center ">
+              {questions &&
+                questions[activeQuestionIndex]?.options.map((el, index) => (
+                  <React.Fragment key={index}>
+                    <Button
+                      className="mb-3 w-75 "
+                      variant="outlined"
+                      onClick={(el) => {
+                        selectedAnswer = el.target.innerText;
+                        isCorrectAnswer(selectedAnswer);
+                        setActiveQuestionIndex((prev) => prev + 1);
+                      }}>
+                      {el}
+                    </Button>
+                  </React.Fragment>
+                ))}
+            </div>
+            <div className="d-flex flex-column align-items-end">
+              <Button
+                className="w-25"
+                onClick={() => {
+                  setActiveQuestionIndex(activeQuestionIndex + 1);
+                }}
+                style={{ backGround: '#F9A826' }}>
+                Next
+              </Button>
+            </div>
           </div>
-        </div>
-      </Box>
+        </Box>
+      )}
     </>
   );
 };
