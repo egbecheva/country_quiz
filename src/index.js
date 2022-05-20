@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import Skeleton from '@mui/material/Skeleton';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 const App = () => {
   const NUMBER_OF_QUESTIONS = 10;
@@ -267,6 +268,13 @@ const App = () => {
     return <>Loading...</>;
   }
 
+  const questionsVariants = (index) => {
+    let variants = ['A', 'B', 'C', 'D'];
+    for (index; index < variants.length; index++) {
+      return variants[index];
+    }
+  };
+
   return (
     <>
       <h5 className="text-uppercase text-white font-weight-bold">Country Quiz</h5>
@@ -329,14 +337,21 @@ const App = () => {
                 questions[activeQuestionIndex]?.options.map((el, index) => (
                   <React.Fragment key={index}>
                     <Button
-                      className="mb-3 w-75 "
-                      variant="outlined"
+                      endIcon={<CheckCircleOutlineIcon />}
+                      className="mb-3 w-75"
+                      style={{
+                        backgroundColor: '#60BF88',
+                        display: 'flex',
+                        justifyContent: 'space-between'
+                      }}
+                      variant="contained"
                       onClick={(el) => {
                         selectedAnswer = el.target.innerText;
                         isCorrectAnswer(selectedAnswer);
                         setActiveQuestionIndex((prev) => prev + 1);
                       }}>
-                      {el}
+                      <div>{questionsVariants(index)}</div>
+                      <div>{el}</div>
                     </Button>
                   </React.Fragment>
                 ))}
@@ -347,7 +362,8 @@ const App = () => {
                 onClick={() => {
                   setActiveQuestionIndex(activeQuestionIndex + 1);
                 }}
-                style={{ backGround: '#F9A826' }}>
+                style={{ backgroundColor: '#F9A826' }}
+                variant="contained">
                 Next
               </Button>
             </div>
