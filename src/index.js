@@ -15,6 +15,7 @@ const App = () => {
   const [questions, setQuestions] = useState([]);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const [countCorrectAnswers, setCountCorrectAnswers] = useState(0);
+  const [isAnyAnswerClicked, setIsAnyAnswerClicked] = useState(false)
   let selectedAnswer;
 
   if (activeQuestionIndex === 9) {
@@ -275,6 +276,9 @@ const App = () => {
     }
   };
 
+
+
+
   return (
     <>
       <h5 className="text-uppercase text-white font-weight-bold">Country Quiz</h5>
@@ -294,7 +298,7 @@ const App = () => {
             <h5>
               {countCorrectAnswers > 1 ? (
                 <>
-                  You got <span>{countCorrectAnswers} </span> correct answers!`
+                  You got <span>{countCorrectAnswers} </span> correct answers!
                 </>
               ) : (
                 <>
@@ -340,18 +344,20 @@ const App = () => {
                       endIcon={<CheckCircleOutlineIcon />}
                       className="mb-3 w-75"
                       style={{
-                        backgroundColor: '#60BF88',
                         display: 'flex',
                         justifyContent: 'space-between'
                       }}
-                      variant="contained"
+                      variant={setIsAnyAnswerClicked ? "outlined" : "contained"}
                       onClick={(el) => {
-                        selectedAnswer = el.target.innerText;
+                        selectedAnswer = el.target?.innerText.includes("\n") ?
+                        el.target?.innerText.substring(2) : 
+                        el.target?.innerText;
+                        setIsAnyAnswerClicked(true)
                         isCorrectAnswer(selectedAnswer);
                         setActiveQuestionIndex((prev) => prev + 1);
                       }}>
-                      <div>{questionsVariants(index)}</div>
-                      <div>{el}</div>
+                        <React.Fragment>{questionsVariants(index)}</React.Fragment>
+                      <div className="clickedAnswer">{el}</div>
                     </Button>
                   </React.Fragment>
                 ))}
