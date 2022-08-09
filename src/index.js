@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -15,29 +15,42 @@ const App = () => {
   const [questions, setQuestions] = useState([]);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const [countCorrectAnswers, setCountCorrectAnswers] = useState(0);
-  const [isAnyAnswerClicked, setIsAnyAnswerClicked] = useState(false)
-  let selectedAnswer;
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false)
+  const [selectedAnswer, setSelectedAnswer] = useState(null)
 
-  if (activeQuestionIndex === 9) {
-    alert(`You have ${countCorrectAnswers} correct answers!`);
-  }
-
+ 
   const fetchCapital = () => {
     fetch('https://restcountries.com/v3.1/all')
-      .then((response) => response.json())
-      .then((data) => setData(data))
-      .catch((err) => console.error(err));
+    .then((response) => response.json())
+    .then((data) => setData(data))
+    .catch((err) => console.error(err));
   };
 
-  const isCorrectAnswer = (selectedAnswer) => {
-    if (questions[activeQuestionIndex]?.country?.toLowerCase() === selectedAnswer?.toLowerCase()) {
-      setCountCorrectAnswers(countCorrectAnswers + 1);
-      alert('Correct!');
-    } else alert('Wrong!');
-  };
+  const handleNextButtonClick = () => {
+    setActiveQuestionIndex(activeQuestionIndex + 1);
+    //setIsNextButtonClicked(true);
+    setSelectedAnswer(null);
+  }
 
   useEffect(() => {
+    if (selectedAnswer === questions[activeQuestionIndex]?.country) {
+      setIsAnswerCorrect(true);
+    }
+   else {
+    setIsAnswerCorrect(false);
+   }
+  }, [selectedAnswer, questions, activeQuestionIndex]);
+
+
+const handleAnswerClick = (event) => {
+  
+  setSelectedAnswer(event.currentTarget.id)
+  questions[activeQuestionIndex]?.country === event.currentTarget.id && setCountCorrectAnswers(countCorrectAnswers+1)
+
+}
+  useEffect(() => {
     fetchCapital();
+    console.log(fetchCapital())
   }, []);
 
   useEffect(() => {
@@ -166,7 +179,7 @@ const App = () => {
         <path
           d="M111.589 24.2194C115.346 24.2194 118.391 21.1843 118.391 17.4402C118.391 13.6961 115.346 10.6609 111.589 10.6609C107.833 10.6609 104.787 13.6961 104.787 17.4402C104.787 21.1843 107.833 24.2194 111.589 24.2194Z"
           fill="#F2F2F2"
-        />
+          />
         <path
           d="M69.0297 47.6472L66.9486 50.0478L73.96 56.0861L76.0411 53.6856L69.0297 47.6472Z"
           fill="#F9A826"
@@ -174,7 +187,7 @@ const App = () => {
         <path
           d="M114.102 90.5772L112.021 92.9777L118.235 98.3302L120.317 95.9296L114.102 90.5772Z"
           fill="#F9A826"
-        />
+          />
         <path
           d="M125.331 72.697V72.8832C125.327 73.3506 125.313 73.8159 125.291 74.2791C124.886 82.2061 121.455 89.6788 115.701 95.1657C109.946 100.653 102.304 103.738 94.3408 103.79C86.3774 103.842 78.6956 100.856 72.8696 95.4449C67.0437 90.0335 63.5148 82.6062 63.0063 74.6852C62.9638 74.0274 62.9426 73.3647 62.9426 72.6971C62.9314 66.2576 64.9366 59.9751 68.6785 54.7256C68.9777 54.3026 69.289 53.8873 69.6122 53.4798C69.835 53.1964 70.0642 52.9193 70.2955 52.6444C75.5614 46.4267 83.0626 42.5138 91.1897 41.7451C99.3169 40.9764 107.423 43.4132 113.768 48.5328C114.144 48.8352 114.513 49.1482 114.874 49.4676C115.162 49.7235 115.446 49.9851 115.724 50.2523C121.213 55.4851 124.592 62.5386 125.223 70.0829C125.295 70.9458 125.331 71.8172 125.331 72.697Z"
           fill="#3F3D56"
@@ -214,11 +227,11 @@ const App = () => {
         <path
           d="M110.337 61.9095C112.005 61.9095 113.357 60.5615 113.357 58.8986C113.357 57.2357 112.005 55.8877 110.337 55.8877C108.668 55.8877 107.316 57.2357 107.316 58.8986C107.316 60.5615 108.668 61.9095 110.337 61.9095Z"
           fill="#3F3D56"
-        />
+          />
         <path
           d="M120.04 53.1899C122.24 53.1899 124.022 51.413 124.022 49.221C124.022 47.029 122.24 45.2521 120.04 45.2521C117.841 45.2521 116.058 47.029 116.058 49.221C116.058 51.413 117.841 53.1899 120.04 53.1899Z"
           fill="white"
-        />
+          />
         <path
           d="M124.067 45.106C122.999 44.0668 121.559 43.4934 120.066 43.5118C118.573 43.5302 117.149 44.1391 116.106 45.2043C113.935 47.4226 110.835 58.6253 110.835 58.6253C110.835 58.6253 121.995 55.2592 124.166 53.0409C125.209 51.9757 125.784 50.5412 125.766 49.0531C125.747 47.5651 125.136 46.1452 124.067 45.106ZM118.218 51.0819C117.849 50.7228 117.595 50.2626 117.488 49.7594C117.381 49.2563 117.426 48.7329 117.618 48.2553C117.809 47.7778 118.139 47.3675 118.564 47.0765C118.99 46.7855 119.492 46.6268 120.008 46.6204C120.524 46.6141 121.03 46.7603 121.463 47.0408C121.895 47.3212 122.235 47.7231 122.438 48.1958C122.641 48.6685 122.7 49.1906 122.605 49.6963C122.511 50.2019 122.268 50.6683 121.908 51.0364C121.425 51.5301 120.764 51.8122 120.073 51.8207C119.381 51.8293 118.714 51.5635 118.218 51.0819Z"
           fill="#57B894"
@@ -231,7 +244,7 @@ const App = () => {
       </defs>
     </svg>
   );
-
+  
   const shuffledOptions = (array) =>
     array
       .map((a) => ({ sort: Math.random(), value: a }))
@@ -262,8 +275,6 @@ const App = () => {
     return arrayWithQuestions;
   };
 
-  console.log(questions[activeQuestionIndex]);
-  //TODO: render conditionally based on data length
 
   if (!data?.length) {
     return <>Loading...</>;
@@ -276,13 +287,10 @@ const App = () => {
     }
   };
 
-
-
-
   return (
     <>
       <h5 className="text-uppercase text-white font-weight-bold">Country Quiz</h5>
-      {activeQuestionIndex === 2 ? (
+      {activeQuestionIndex === 10 ? (
         <Box
           sx={{
             width: 350,
@@ -296,13 +304,14 @@ const App = () => {
           <div className="p-4">
             <h1 className="d-flex flex-column align-items-center ">Results</h1>
             <h5>
-              {countCorrectAnswers > 1 ? (
+              {countCorrectAnswers === 1 ? (
                 <>
-                  You got <span>{countCorrectAnswers} </span> correct answers!
+                  You got <span className="divStyle">{countCorrectAnswers} </span> correct answer!
                 </>
               ) : (
                 <>
-                  You got <span className="divStyle">{countCorrectAnswers} </span> correct answer!
+                  You got <span>{countCorrectAnswers} </span> correct answers!
+
                 </>
               )}
             </h5>
@@ -336,38 +345,34 @@ const App = () => {
               {questions && questions[activeQuestionIndex]?.capital}
               &nbsp;is the capital of
             </h5>
-            <div className="d-flex flex-column align-items-center ">
+            <span className="d-flex flex-column align-items-center ">
               {questions &&
                 questions[activeQuestionIndex]?.options.map((el, index) => (
-                  <React.Fragment key={index}>
                     <Button
+                      id={el}
+                      key={index} 
                       endIcon={<CheckCircleOutlineIcon />}
-                      className="mb-3 w-75"
+                      className="mb-3 w-75 baba"
+                      variant="outlined"
                       style={{
                         display: 'flex',
-                        justifyContent: 'space-between'
+                        justifyContent: 'space-between',
+                        backgroundColor: selectedAnswer && el === questions[activeQuestionIndex]?.country ? "green" : selectedAnswer === el ? "red" : "white",
+                        color: selectedAnswer && el === questions[activeQuestionIndex]?.country ? "white" : selectedAnswer === el ? "white" : "#1976D2",
                       }}
-                      variant={setIsAnyAnswerClicked ? "outlined" : "contained"}
                       onClick={(el) => {
-                        selectedAnswer = el.target?.innerText.includes("\n") ?
-                        el.target?.innerText.substring(2) : 
-                        el.target?.innerText;
-                        setIsAnyAnswerClicked(true)
-                        isCorrectAnswer(selectedAnswer);
-                        setActiveQuestionIndex((prev) => prev + 1);
-                      }}>
-                        <React.Fragment>{questionsVariants(index)}</React.Fragment>
+                        handleAnswerClick(el);
+                      }}
+                      >
+                        {questionsVariants(index)}
                       <div className="clickedAnswer">{el}</div>
                     </Button>
-                  </React.Fragment>
                 ))}
-            </div>
+            </span>
             <div className="d-flex flex-column align-items-end">
               <Button
                 className="w-25"
-                onClick={() => {
-                  setActiveQuestionIndex(activeQuestionIndex + 1);
-                }}
+                onClick={handleNextButtonClick}
                 style={{ backgroundColor: '#F9A826' }}
                 variant="contained">
                 Next
