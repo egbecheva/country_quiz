@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import Skeleton from '@mui/material/Skeleton';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
+import winners from './assets/winners.svg';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 const App = () => {
@@ -16,7 +17,6 @@ const App = () => {
   const [countCorrectAnswers, setCountCorrectAnswers] = useState(0);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false)
   const [selectedAnswer, setSelectedAnswer] = useState(null)
-  const isQuestionSetAvailable = questions[activeQuestionIndex]?.capital && questions[activeQuestionIndex]?.flag
   const getRandomIndex = () => parseInt(Math.random() * data?.length);
   const isRandomIndexEven = () => activeQuestionIndex % 2 === 0 ? true : false
 
@@ -245,9 +245,9 @@ const handleAnswerClick = (event) => {
     </svg>
   );
 
-  const resultsImage = <svg width="238"
+  const resultsImage = <svg width="300"
   height="128"
-  viewBox="0 0 238 128" fill="none">
+  viewBox="0 0 300 128" fill="red ">
   <g clipPath="url(#clip0)">
   <path opacity="0.1" d="M143.075 98.0236C147.673 97.761 153.377 94.6367 157.812 93.2549C163.062 91.6236 168.332 90.0542 173.624 88.5466C192.044 83.2957 210.661 78.8216 229.477 75.1242C231.233 74.7782 232.991 74.4406 234.753 74.1113C232.009 68.1716 227.758 63.0569 222.424 59.2778C222.561 57.9775 222.63 56.6711 222.632 55.3636C222.632 34.7006 206.149 17.9497 185.809 17.9497C179.546 17.943 173.389 19.5623 167.938 22.6496C153.541 13.1622 134.751 7.42015 114.192 7.42015C84.9791 7.42015 59.3337 19.0147 44.802 36.4743L113.098 48.0334L154.985 55.1198C107.233 56.5475 59.3337 57.9668 11.7192 54.6154C5.43381 60.7082 1.45562 68.7986 0.464466 77.5042C-0.526683 86.2097 1.53074 94.9899 6.28511 102.344C6.28511 103.092 6.31632 103.834 6.37249 104.57C7.58537 104.918 8.75665 105.256 9.80726 105.477C26.6739 109.046 43.6488 112.034 60.7318 114.439C48.1432 122.215 32.8125 123.316 18.2912 126.609C25.323 132.424 34.8722 135.988 45.3949 135.988H202.075C219.041 135.988 232.793 124.156 232.793 109.558C235.339 105.352 237.035 100.686 237.786 95.8247C206.392 98.8614 174.608 96.2249 143.075 98.0236Z" fill="#F9A826"/>
   <path opacity="0.1" d="M238 89.607C238.017 83.5907 236.589 77.6586 233.837 72.3111C231.086 66.9635 227.091 62.3574 222.189 58.8814C222.325 57.5817 222.394 56.276 222.397 54.9693C222.397 34.3062 205.906 17.5615 185.574 17.5615C179.311 17.5548 173.153 19.1733 167.701 22.2594C153.304 12.7678 134.512 7.0237 113.953 7.0237C80.5124 7.0237 51.7277 22.2281 38.9622 44.0312C38.2528 43.9895 37.5392 43.9666 36.8194 43.9666C16.4854 43.9666 -0.00401745 60.7176 -0.00401745 81.3806C-0.0182699 88.6792 2.0866 95.8243 6.05416 101.946C6.05416 120.537 23.5692 135.608 45.1661 135.608H201.851C218.815 135.608 232.566 123.774 232.566 109.176C236.134 103.275 238.014 96.5057 238 89.607Z" fill="#F9A826"/>
@@ -414,7 +414,7 @@ const handleAnswerClick = (event) => {
 
   const answers = 
   <span className="d-flex flex-column align-items-center ">
-    {questions && isQuestionSetAvailable && questions[activeQuestionIndex]?.options.map((el, index) => (
+    {questions && questions[activeQuestionIndex]?.options.map((el, index) => (
         <Button
           id={el}
           key={index} 
@@ -453,16 +453,16 @@ const handleAnswerClick = (event) => {
             backgroundColor: '#FFF'
           }}>
           <div className="undraw-adventure-icon">{undrawAdventure}</div>
-          <div className="p-4">
-            <h1 className="d-flex flex-column align-items-center ">Results</h1>
-            <div className="results-image">{resultsImage}</div>
-            <h5 className="d-flex justify-content-center">
+          <div className="p-4 d-flex justify-content-center flex-column">
+            <img className='winners' src={winners}/>
+            <h1 className="d-flex flex-column align-items-center">Results</h1>
+            <h5>
               {countCorrectAnswers === 1 ? (
-                <div className='d-flex align-items-baseline'>
+                <div className='d-flex align-items-baseline justify-content-center'>
                   You got <span className="answerCount">{countCorrectAnswers} </span> correct answer!
                 </div>
               ) : (
-                <div className='d-flex align-items-baseline'>
+                <div className='d-flex align-items-baseline justify-content-center'>
                   You got <span className="answerCount">{countCorrectAnswers} </span> correct answers!
 
                 </div>
@@ -494,7 +494,7 @@ const handleAnswerClick = (event) => {
           }}>
           <div className="undraw-adventure-icon">{undrawAdventure}</div>
           <div className="p-4">
-              {isQuestionSetAvailable && isRandomIndexEven() ? 
+              {questions && isRandomIndexEven() ? 
               <>
                 <h5 className="d-flex flex-column align-items-center ">
                   {questions[activeQuestionIndex]?.capital} &nbsp;is the capital of

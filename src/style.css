@@ -20,6 +20,10 @@ body {
   padding-right: 12px;
 }
 
-.results-image {
-  position: absolute
+.winners {
+  padding: inherit;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 75%;
 }
