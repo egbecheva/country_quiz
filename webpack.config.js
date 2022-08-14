@@ -1,5 +1,11 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const path = require('path');
 module.exports = {
+  entry: './src/index.tsx',
+  devtool: 'inline-source-map',
+  watchOptions: {
+    ignored: ['**/files/**/*.js', '**/node_modules']
+  },
   module: {
     rules: [
       {
@@ -10,22 +16,50 @@ module.exports = {
         }
       },
       {
+        test: /\.tsx?$/,
+        use: {
+          loader: 'ts-loader'
+        },
+        exclude: /node_modules/
+      },
+      {
         test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader' //Install HTML web pack plugin and HTML loader for displaying our page
-          }
-        ]
+        use: {
+          loader: 'html-loader' //Install HTML web pack plugin and HTML loader for displaying our page
+        }
       },
       {
         test: /\.(png|jpg|svg)$/,
-        loader: 'url-loader'
+        use: {
+          loader: 'url-loader'
+        }
       },
       {
-        test: /\.(sass|less|css)$/,
-        loaders: ['style-loader', 'css-loader']
+        test: /\.(svg)$/,
+        use: {
+          loader: 'file-loader'
+        }
+      },
+      {
+        test: /\.(css)$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader'
+          }
+        ]
       }
     ]
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js']
+  },
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist/'),
+    publicPath: '/'
   },
   plugins: [
     new HtmlWebPackPlugin({
