@@ -20,8 +20,6 @@ const App: FC = () => {
   const [selectedAnswer, setSelectedAnswer] = useState(null)
   const getRandomIndex = ():number => Math.round(Math.random() * data?.length);
   const isRandomIndexEven = () => activeQuestionIndex % 2 === 0 ? true : false
-  const winners = require("./assets/winners.svg") as string
-  const undrawAdventure = require("./assets/icon.svg") as string
 
   interface Country {
     "name": {
@@ -330,9 +328,9 @@ const answers =
           }}
         >
 
-          {/* <img className="undraw-adventure-icon" src={Icon}/> */}
+          <img className="undraw-adventure-icon" src="../src/assets/icon.svg"/>
           <div className="p-4 d-flex justify-content-center flex-column">
-            <img className="winners" src={winners}/>
+            <img className="winners" src="../src/assets/winners.svg"/>
             <h1 className="d-flex flex-column align-items-center"> Results </h1>
             <h5>
               {countCorrectAnswers === 1 ? (
@@ -375,7 +373,7 @@ const answers =
             backgroundColor: "#FFF",
           }}
         >
-          <img className="undraw-adventure-icon" src={undrawAdventure}/>
+          <img className="undraw-adventure-icon" src="../src/assets/icon.svg"/>
           <div className="p-4">
             {questions && isRandomIndexEven() ? (
               <div>
