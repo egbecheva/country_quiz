@@ -7,19 +7,20 @@ import Skeleton from '@mui/material/Skeleton';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { stringify } from 'querystring';
 
 const App: FC = () => {
   const NUMBER_OF_QUESTIONS = 5;
   const NUMBER_OF_RANDOM_ANSWERS = 3;
   //TODO: fix types below
-  const [data, setData] = useState<Array<Country>>([]);
-  const [questions, setQuestions] = useState<any[]>([]);
-  const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
-  const [countCorrectAnswers, setCountCorrectAnswers] = useState(0);
-  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false)
-  const [selectedAnswer, setSelectedAnswer] = useState(null)
+  const [data, setData] = useState<Country[]>([]);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [activeQuestionIndex, setActiveQuestionIndex] = useState<number>(0);
+  const [countCorrectAnswers, setCountCorrectAnswers] = useState<number>(0);
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean>(false)
+  const [selectedAnswer, setSelectedAnswer] = useState<string>("")
   const getRandomIndex = ():number => Math.round(Math.random() * data?.length);
-  const isRandomIndexEven = () => activeQuestionIndex % 2 === 0 ? true : false
+  const isRandomIndexEven = ():boolean => activeQuestionIndex % 2 === 0 ? true : false
 
   interface Country {
     "name": {
@@ -197,17 +198,26 @@ const App: FC = () => {
     }
 }
 
+interface Question {
+  "capital": string,
+  "country": string,
+  "flag": string,
+  "id": number,
+  "options": string[]
+}
 
-  function fetchCapital() {
-    fetch('https://restcountries.com/v3.1/all')
-      .then((response) => response.json())
-      .then((data) => setData(data))
-      .catch((err) => console.error(err));
-  }
+
+function fetchCapital() {
+  fetch('https://restcountries.com/v3.1/all')
+  .then((response) => response.json())
+  .then((data:Country[]) => setData(data))
+  .catch((err) => console.error(err));
+}
+
 
   const handleNextButtonClick = () => {
     setActiveQuestionIndex(activeQuestionIndex + 1);
-    setSelectedAnswer(null);
+    setSelectedAnswer("");
   }
 
   useEffect(() => {
@@ -226,7 +236,7 @@ const App: FC = () => {
     questions[activeQuestionIndex]?.country === event.currentTarget.id && setCountCorrectAnswers(countCorrectAnswers + 1)
   }
   useEffect(() => {
-    fetchCapital();
+    fetchCapital()
   }, []);
 
   useEffect(() => {
@@ -250,9 +260,6 @@ const App: FC = () => {
     }
     return arr;
   };
-
-  console.log(getRandomAnswers())
-
 
 //TODO: Fix any in options
   const generateQuestions = () => {
@@ -298,7 +305,7 @@ const answers =
           justifyContent: 'space-between',
           backgroundColor: selectedAnswer && el === questions[activeQuestionIndex]?.country ? "#60BF88" : selectedAnswer === el ? "#EA8282" : "white",
           color: selectedAnswer && el === questions[activeQuestionIndex]?.country ? "white" : selectedAnswer === el ? "white" : "#1976D2",
-          border:selectedAnswer && el === questions[activeQuestionIndex]?.country ? "#60BF88" : selectedAnswer === el ? "#EA8282" : null
+          borderColor:selectedAnswer && el === questions[activeQuestionIndex]?.country ? "#60BF88" : selectedAnswer === el ? "#EA8282" : ""
         }}
         onClick={(el) => {
           handleAnswerClick(el);
