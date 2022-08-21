@@ -1,18 +1,16 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, MouseEvent } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Skeleton from '@mui/material/Skeleton';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import { stringify } from 'querystring';
 
 const App: FC = () => {
   const NUMBER_OF_QUESTIONS = 5;
   const NUMBER_OF_RANDOM_ANSWERS = 3;
-  //TODO: fix types below
   const [data, setData] = useState<Country[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState<number>(0);
@@ -215,7 +213,7 @@ function fetchCapital() {
 }
 
 
-  const handleNextButtonClick = () => {
+  const handleNextButtonClick = ():void => {
     setActiveQuestionIndex(activeQuestionIndex + 1);
     setSelectedAnswer("");
   }
@@ -229,12 +227,12 @@ function fetchCapital() {
     }
   }, [selectedAnswer, questions, activeQuestionIndex]);
 
-//TODO:Fix any
-  const handleAnswerClick = (event:any) => {
-
+  const handleAnswerClick = (event:MouseEvent):void => {
+    event.preventDefault();
     setSelectedAnswer(event.currentTarget.id)
     questions[activeQuestionIndex]?.country === event.currentTarget.id && setCountCorrectAnswers(countCorrectAnswers + 1)
   }
+
   useEffect(() => {
     fetchCapital()
   }, []);
@@ -261,9 +259,8 @@ function fetchCapital() {
     return arr;
   };
 
-//TODO: Fix any in options
   const generateQuestions = () => {
-    let arrayWithQuestions: Array<{ "id": number, "country": string, "capital": string, "flag": string, "options": string[] }> = [];
+    let arrayWithQuestions: Question[] = [];
     for (let i: number = 0; i < NUMBER_OF_QUESTIONS; i++) {
       const questionId:number = getRandomIndex();
       arrayWithQuestions.push({
@@ -289,11 +286,10 @@ function fetchCapital() {
   };
 
  
-  //TODO: Fix any
 
 const answers =
   <div className="d-flex flex-column align-items-center" >
-    {questions && questions[activeQuestionIndex]?.options.map((el:any, index:number) => (
+    {questions && questions[activeQuestionIndex]?.options.map((el:string, index:number) => (
       <Button
         id={el}
         key={index}
@@ -307,7 +303,7 @@ const answers =
           color: selectedAnswer && el === questions[activeQuestionIndex]?.country ? "white" : selectedAnswer === el ? "white" : "#1976D2",
           borderColor:selectedAnswer && el === questions[activeQuestionIndex]?.country ? "#60BF88" : selectedAnswer === el ? "#EA8282" : ""
         }}
-        onClick={(el) => {
+        onClick={(el:MouseEvent) => {
           handleAnswerClick(el);
         }}
       >
