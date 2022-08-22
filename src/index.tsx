@@ -335,21 +335,21 @@ const answers =
           }}
         >
 
-          <img className="undraw-adventure-icon" src="../src/assets/icon.svg"/>
+          <img className="undraw-adventure-icon" src="./icon.svg"/>
           <div className="p-4 d-flex justify-content-center flex-column">
-            <img className="winners" src="../src/assets/winners.svg"/>
+            <img className="winners" src="./winners.svg"/>
             <h1 className="d-flex flex-column align-items-center"> Results </h1>
             <h5>
               {countCorrectAnswers === 1 ? (
                 <div className="d-flex align-items-baseline justify-content-center">
                   You got
-                  <span className="answerCount"> {countCorrectAnswers} </span>{" "}
+                  <span className="answerCount"> {countCorrectAnswers} </span>
                   correct answer!
                 </div>
               ) : (
                 <div className="d-flex align-items-baseline justify-content-center">
                   You got
-                  <span className="answerCount"> {countCorrectAnswers} </span>{" "}
+                  <span className="answerCount"> {countCorrectAnswers} </span>
                   correct answers!
                 </div>
               )}
@@ -379,7 +379,7 @@ const answers =
             backgroundColor: "#FFF",
           }}
         >
-          <img className="undraw-adventure-icon" src="../src/assets/icon.svg"/>
+          <img className="undraw-adventure-icon" src="./icon.svg"/> 
           <div className="p-4">
             {questions && isRandomIndexEven() ? (
               <div>
