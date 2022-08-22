@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { FC, useState, useEffect, MouseEvent } from 'react';
+import { StrictMode, useState, useEffect, MouseEvent, FC } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Skeleton from '@mui/material/Skeleton';
@@ -15,6 +15,7 @@ const App: FC = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState<number>(0);
   const [countCorrectAnswers, setCountCorrectAnswers] = useState<number>(0);
+  const [isAnswerClicked,setIsAnswerClicked] = useState<boolean>(false)
   const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean>(false)
   const [selectedAnswer, setSelectedAnswer] = useState<string>("")
   const getRandomIndex = ():number => Math.round(Math.random() * data?.length);
@@ -216,6 +217,7 @@ function fetchCapital() {
   const handleNextButtonClick = ():void => {
     setActiveQuestionIndex(activeQuestionIndex + 1);
     setSelectedAnswer("");
+    setIsAnswerClicked(false)
   }
 
   useEffect(() => {
@@ -229,7 +231,8 @@ function fetchCapital() {
 
   const handleAnswerClick = (event:MouseEvent):void => {
     event.preventDefault();
-    setSelectedAnswer(event.currentTarget.id)
+    setSelectedAnswer(event.currentTarget.id);
+    setIsAnswerClicked(true)
     questions[activeQuestionIndex]?.country === event.currentTarget.id && setCountCorrectAnswers(countCorrectAnswers + 1)
   }
 
@@ -288,9 +291,10 @@ function fetchCapital() {
  
 
 const answers =
-  <div className="d-flex flex-column align-items-center" >
+  <div style={{position: "relative"}} className="d-flex flex-column align-items-center" >
     {questions && questions[activeQuestionIndex]?.options.map((el:string, index:number) => (
       <Button
+        disabled={isAnswerClicked}
         id={el}
         key={index}
         endIcon={< CheckCircleOutlineIcon/>}
@@ -358,7 +362,6 @@ const answers =
                   setActiveQuestionIndex(0);
                   setCountCorrectAnswers(0);
                 }}
-                //style={{ backGround: "#F9A826" }}
               >
                 Try again
               </Button>
@@ -381,7 +384,7 @@ const answers =
             {questions && isRandomIndexEven() ? (
               <div>
                 <h5 className="d-flex flex-column align-items-center ">
-                  {questions[activeQuestionIndex]?.capital} &nbsp;is the capital
+                  {questions && questions[activeQuestionIndex]?.capital} &nbsp;is the capital
                   of
                 </h5>
                   {answers}
@@ -411,8 +414,13 @@ const answers =
           </div>
         </Box>
       )}
+      <span style={{color:"white",position: "absolute", bottom: "5px"}}>Created by <a style={{color:"white", fontWeight:"bold"}} href="https://github.com/egbecheva">egbecheva</a> - devChallenges.io</span>
     </div>
   )
 };
 
-ReactDOM.render(<App/>, document.querySelector('#root'));
+ReactDOM.render(
+  <StrictMode>
+    <App/>
+  </StrictMode>,
+   document.querySelector('#root'));
