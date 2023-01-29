@@ -36,13 +36,13 @@
 - Webpack
 
 ## Features
-A country quiz app using an API. User stories covered:
-- I can see at least 2 types of questions: a city is the capital of.. or a flag belong to country..
-- I can see select an answer
-- I can see if my answer is correct or incorrect
-- When I answer correctly, I can move on to the next question
-- When I answer incorrectly, I can see my results and try again
-- I can try again
+This project is a country quiz web application that utilizes a RESTful API to retrieve and display questions. The application features two types of questions: identifying the capital city of a country and matching a flag to its corresponding country.
+
+Users are able to select their answer and receive immediate feedback on whether their answer is correct or incorrect. Upon answering correctly, users are able to progress to the next question. Incorrect answers are shown as well as the correct ones and the app prompts users to go to the next question, without allowing them to answer the same question again.
+
+The application also shows the count of the correct answers at the end of the quiz and includes the ability for users to retry the latter. The user interface is intuitive and user-friendly. This project demonstrates knowledge in web development, RESTful API integration, and understanding of user experience.
+
+Technologies used in the development of this project include React, RESTful API, JavaScript, and HTML/CSS, Webpack & Babel.
 
 
 <!-- List the features of your application or follow the template. Don't share the figma file here :) -->
