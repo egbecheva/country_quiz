@@ -1,10 +1,10 @@
 <!-- Please update value in the {}  -->
 
-<h1 align="center">Country quiz</h1>
+<h1 align="center">Remote jobs SPA</h1>
 
 <div align="center">
   <h3>
-    <a href="https://country-quiz-app-1b4c1.web.app/">
+    <a href="https://github-jobs-86113.web.app/?">
       Demo
     </a>
   </h3>
@@ -23,7 +23,9 @@
 
 ## Overview
 
-![image](https://user-images.githubusercontent.com/34000861/186021161-430e719b-1db9-42d3-888b-55459e02dcb2.png)
+![overview1](https://user-images.githubusercontent.com/34000861/215329749-0444f6cb-7a4c-4dd3-a0b2-d5a570350ae5.JPG)
+![overview2](https://user-images.githubusercontent.com/34000861/215329771-213120de-1e38-4347-a480-8820234f38d4.JPG)
+
 
 ### Built With
 
@@ -36,16 +38,15 @@
 - Webpack
 
 ## Features
-This project is a country quiz web application that utilizes a RESTful API to retrieve and display questions. The application features two types of questions: identifying the capital city of a country and matching a flag to its corresponding country.
+A web-based application that utilizes a RESTful API to retrieve remote job listings from a remote server. The app allows users to search for jobs based on a variety of criteria including keyword, location, job type, and salary range. 
+The user interface is built using React, and makes use of pagination to display a large number of job listings. Users can filter their search results based on location, title, salary, and benefits, as well as select whether they are looking for full-time or part-time positions.
+ The design of the application is based on a <a href="https://www.figma.com/file/gAkVx9CdOqnJcCjJ7nVNkw/job-search?node-id=0%3A1"> Figma </a> design and implements a number of user stories, such as the ability to search for jobs with a given keyword, search for jobs with a city name or zip code, select one option from at least 4 pre-defined options, search for full-time jobs only, and see a list of jobs with their logo, company name, location, and posted time.
 
-Users are able to select their answer and receive immediate feedback on whether their answer is correct or incorrect. Upon answering correctly, users are able to progress to the next question. Incorrect answers are shown as well as the correct ones and the app prompts users to go to the next question, without allowing them to answer the same question again.
+When a user clicks on a job, they are directed to a job details page, where they can see job descriptions and information on how to apply. The job details page also includes a button that allows the user to return to the search page. The application uses Javascript, React, and Bootstrap as the main technologies and it is built with TypeScript.
 
-The application also shows the count of the correct answers at the end of the quiz and includes the ability for users to retry the latter. The user interface is intuitive and user-friendly. This project demonstrates knowledge in web development, RESTful API integration, and understanding of user experience.
-
-Technologies used in the development of this project include React, RESTful API, JavaScript, and HTML/CSS, Webpack & Babel.
+Technologies used in the development of this project include React, RESTful API, JavaScript, Material UI and HTML/CSS, Webpack & Babel.
 
 
-<!-- List the features of your application or follow the template. Don't share the figma file here :) -->
 
 ## How To Use
 
